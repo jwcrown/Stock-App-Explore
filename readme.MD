@@ -5,7 +5,7 @@ Made using backbone.js, express, and node, this web application utilizes the [AL
 
 # Setup
 
-1. clone project `git clone https://github.com/jwcrown/Stock-App-Explore`
+1. Clone project `git clone https://github.com/jwcrown/Stock-App-Explore`
 
 2. Inside **public** folder `bower install jquery backbone underscore bootstrap`
 If bower not installed you can download it [here](https://bower.io/)
