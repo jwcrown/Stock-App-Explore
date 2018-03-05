@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Stock App</title>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1>Stock App</h1>
+        </div>
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Stock Names: <span style="font-weight: normal">(separated by commas)</span></th>
+                    <th>Price:</th>
+                    <th>Action:</th>
+                </tr>
+                <tr>
+                    <td><input class="form-control ticket-input"></td>
+                    <td></td>
+                    <td><button class="btn btn-primary add-stock">Check Stock</button></td>
+                </tr>
+            </thead>
+            <tbody class="stocks-list"></tbody>
+        </table>
+    </div>
+
+    <script type="text/template" class="stocks-list-template">
+    <td><span class="ticket"><%= ticket %></span></td>
+    <td><span class="price"><%= price %></span></td>
+    <td><button class="btn btn-danger delete-stock">Delete</button></td>
+    </script>
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/backbone/backbone.js"></script>
+    <script src="js/scripts.js"></script>
+
+</body>
+</html>
