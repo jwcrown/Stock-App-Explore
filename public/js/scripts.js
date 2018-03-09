@@ -1,26 +1,28 @@
-// backbone model
-
-var Stock = Backbone.Model.extend({
+//backbone model
+var StockModel = Backbone.Model.extend({  //Wanted to match model from API but format causes issue in HTML
     defaults: {
-        price: '',
-        ticket: '',
+        symbol: null,
+        price: null
+    },
+    initialize: function(){
+        console.log("Stock model created!");
     }
 });
 
 // backbone collection
-
-var Stocks = Backbone.Collection.extend({
-    url: 'http://localhost:8000/api/stocks'
+var StockCollection = Backbone.Collection.extend({
+    model: StockModel,
+    url: 'http://localhost:8000/api/stocks',
+    parse: function(data){
+        return data["Stock Quotes"]
+    }
 });
 
 // instantiate a collection
-
-var stocks = new Stocks();
+var StockTable = new StockCollection();
 
 // backbone views
-
 var StockView = Backbone.View.extend({
-    model: new Stock(),
     tagName: 'tr',
     initialize: function () {
         this.template = _.template($('.stocks-list-template').html());
@@ -31,21 +33,18 @@ var StockView = Backbone.View.extend({
     delete: function () {
         this.model.destroy();
     },
-    
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
         return this;
     }
 });
 
-var StocksView = Backbone.View.extend({
-    model: stocks,
+var StockListView = Backbone.View.extend({
+    model: StockTable,
     el: $('.stocks-list'),
     initialize: function () {
         this.model.on('remove', this.render, this);
         this.model.on('add', this.render, this);
-        
-
     },
     render: function () {
         var self = this;
@@ -57,35 +56,32 @@ var StocksView = Backbone.View.extend({
     }
 });
 
-var stocksView = new StocksView();
+var stocksView = new StockListView();
 
 $(document).ready(function () {
     $('.add-stock').on('click', function () {
-        var stock = new Stock({
-            ticket: $('.ticket-input').val(),
-            price: "",
+        var stock = new StockModel({
+            symbol: $('.ticket-input').val()
         });
         $('.ticket-input').val('');
-        stocks.add(stock);
+        StockTable.add(stock);
         
-
         stock.save(null, {
             success: function (response) {
                 console.log('Successfully got stocks');
-                console.log(response.attributes.ticket);
                 for (var stockIdx in response.attributes["Stock Quotes"]){
-                    var stock = new Stock({
-                        ticket: response.attributes["Stock Quotes"][stockIdx]["1. symbol"],
+                    var stock = new StockModel({
+                        symbol: response.attributes["Stock Quotes"][stockIdx]["1. symbol"],
                         price: "$" + response.attributes["Stock Quotes"][stockIdx]["2. price"]
                     });
-                    stocks.add(stock);
+                    StockTable.add(stock);
                 }
     
             },
             error: function () {
                 console.log('Failed to get stocks!');
             }
-        })
-        stocks.remove(stock);
+        });
+        StockTable.remove(stock);  //How can I avoid this?
     });
 });
